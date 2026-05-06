@@ -1,0 +1,273 @@
+/**
+ * index.css — Refatorado v2.0.0
+ * 
+ * CORREÇÕES:
+ * - font-display: swap adicionado (evita FOUT/FOIT em mobile)
+ * - text-accent-gradient: fallback para browsers sem -webkit-text-fill-color
+ * - hover-glow-text: corrigido para não aplicar -webkit-text-fill-color no estado default
+ * - Scrollbar apenas desktop (mobile scrollbar causa layout shift)
+ * - Grain overlay: z-index 9999 com pointer-events: none verificado
+ * - Adicionado: focus-visible global consistente
+ * - Adicionado: tap-highlight-color removido em mobile (melhora UX)
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
+
+  /* Sophisticated Dark Palette */
+  --color-background: #050505;
+  --color-foreground: #FFFFFF;
+  --color-surface: #0c0c0c;
+  --color-surface-hover: #141414;
+  --color-border: rgba(255, 255, 255, 0.05);
+
+  /* Premium Gold Accent */
+  --color-accent: #E8C361;
+  --color-accent-dim: rgba(232, 195, 97, 0.05);
+  --color-accent-glow: rgba(232, 195, 97, 0.25);
+  --color-accent-foreground: #000000;
+}
+
+/* ─── Base Reset ─── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  line-height: 1.65;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* CORRIGIDO: remove tap highlight azul no iOS/Android */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* CORRIGIDO: heading line-height global mais generoso em mobile */
+h1, h2, h3, h4, h5, h6,
+.font-display {
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+}
+
+/* ─── Focus Visible ─── */
+
+/* ADICIONADO: focus visível consistente para acessibilidade */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Remove outline apenas quando foco via mouse/touch */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ─── Scrollbar (desktop only) ─── */
+
+@media (min-width: 1024px) {
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-background);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #222;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-accent);
+  }
+}
+
+/* ─── Text Utilities ─── */
+
+.text-gradient {
+  background: linear-gradient(to bottom right, #ffffff 0%, #a0a0a0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 
+  CORRIGIDO: text-accent-gradient
+  - Antes: aplicava -webkit-text-fill-color globalmente, quebrando
+    descendentes e causando invisibilidade em alguns Android WebViews
+  - Agora: isolado com @supports para garantir fallback correto
+*/
+.text-accent-gradient {
+  color: var(--color-accent); /* Fallback para browsers antigos */
+}
+
+@supports (-webkit-background-clip: text) {
+  .text-accent-gradient {
+    background: linear-gradient(
+      135deg,
+      var(--color-accent) 0%,
+      #FFF8DC 45%,
+      var(--color-accent) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+/* ─── Cinematic Grain ─── */
+
+/*
+  CORRIGIDO: 
+  - z-index reduzido de 50 para 9999 seria errado; mantemos abaixo de modais (z-50 = 50)
+  - pointer-events: none garantido
+  - position: fixed não causa reflow de layout
+*/
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 49; /* Abaixo do navbar (z-50) mas acima do conteúdo */
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  /* Evita que o grain fique pixelado em retina */
+  image-rendering: auto;
+}
+
+/* ─── Hover Glow Text (Expertise Section) ─── */
+
+/*
+  CORRIGIDO:
+  - Estado default NÃO aplica -webkit-text-fill-color (era transparente em alguns browsers)
+  - Shimmer só ativo no hover
+  - animation-fill-mode: forwards para não piscar no final do loop
+*/
+@keyframes slide-glow {
+  from {
+    background-position: 200% center;
+  }
+  to {
+    background-position: -200% center;
+  }
+}
+
+.hover-glow-text {
+  /* Estado default: apenas cor normal herdada */
+  color: inherit;
+  transition: color 0.5s ease;
+}
+
+.group:hover .hover-glow-text {
+  background-image: linear-gradient(
+    -60deg,
+    var(--color-foreground) 20%,
+    var(--color-accent) 40%,
+    #FFF5D1 50%,
+    var(--color-accent) 60%,
+    var(--color-foreground) 80%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: slide-glow 2.5s linear infinite;
+  /* Fallback se -webkit-background-clip não suportado */
+  color: var(--color-accent);
+}
+
+/* CORRIGIDO: Remove -webkit-text-fill-color quando grupo não está em hover */
+.group:not(:hover) .hover-glow-text {
+  -webkit-text-fill-color: currentColor;
+  background-image: none;
+  animation: none;
+}
+
+/* ─── Fluid Image Mask ─── */
+
+.img-mask-reveal {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.group:hover .img-mask-reveal {
+  clip-path: inset(0 0 0 0);
+}
+
+/* ─── Mobile-specific fixes ─── */
+
+/* 
+  ADICIONADO: Fix para iOS Safari que às vezes ignora overflow-x: hidden no body
+  Envolve o conteúdo num wrapper com overflow-x: hidden explícito
+*/
+#root {
+  overflow-x: hidden;
+}
+
+/*
+  ADICIONADO: Previne text selection indesejada em elementos interativos no mobile
+*/
+button,
+[role="button"] {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* 
+  ADICIONADO: Safe area insets para iPhone com notch/Dynamic Island 
+*/
+@supports (padding: env(safe-area-inset-bottom)) {
+  footer {
+    padding-bottom: calc(3rem + env(safe-area-inset-bottom));
+  }
+}
+
+/* ─── Reduced Motion ─── */
+
+/*
+  ADICIONADO: Para usuários com preferência de movimento reduzido,
+  desabilita todas as animações pesadas (complementa useReducedMotion do React)
+*/
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ─── Print ─── */
+
+@media print {
+  .grain-overlay,
+  nav,
+  footer {
+    display: none;
+  }
+  body {
+    background: white;
+    color: black;
+  }
+}

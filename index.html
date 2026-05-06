@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+
+    <!--
+      CORRIGIDO: viewport
+      - Removido maximum-scale=5.0 (era redundante e pode interferir em accessibility)
+      - viewport-fit=cover: suporte a notch/safe areas no iOS
+    -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+
+    <!-- Primary Meta -->
+    <title>Raí Santos | Web Designer de Alta Conversão em Goiânia</title>
+    <meta
+      name="description"
+      content="Web Designer especialista em alta conversão para clínicas estéticas, petshops e barbearias em Goiânia e Brasil. Pare de perder dinheiro com sites amadores e domine seu mercado."
+    />
+    <meta
+      name="keywords"
+      content="web designer goiânia, alta conversão, clínicas estéticas, petshops, barbearias, criação de sites, landing page, Raí Santos"
+    />
+    <meta name="author" content="Raí Santos" />
+
+    <!-- ADICIONADO: Theme color para barra do browser mobile -->
+    <meta name="theme-color" content="#050505" />
+
+    <!-- ADICIONADO: Apple mobile web app -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://raisantos.com.br/" />
+    <meta
+      property="og:title"
+      content="Raí Santos | Web Designer de Alta Conversão"
+    />
+    <meta
+      property="og:description"
+      content="Transforme visitantes em clientes pagantes com design premium e persuasivo focado em negócios locais de alto ticket."
+    />
+    <meta property="og:site_name" content="Raí Santos — Portfolio" />
+    <!-- og:image: adicione uma imagem OG de 1200x630 quando disponível -->
+    <!-- <meta property="og:image" content="https://raisantos.com.br/og-image.jpg" /> -->
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Raí Santos | Web Designer de Alta Conversão" />
+    <meta name="twitter:description" content="Ecossistemas digitais impiedosos que convertem visitantes em tickets altíssimos." />
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://raisantos.com.br/" />
+
+    <!--
+      CORRIGIDO: Font loading
+      - Adicionado &display=swap na URL (FOUT ao invés de FOIT)
+      - preconnect antes do link rel=stylesheet
+      - Dois pesos a menos de DM Sans (menos bytes)
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- ADICIONADO: preload da imagem hero para LCP mais rápido -->
+    <link
+      rel="preload"
+      as="image"
+      href="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop"
+      fetchpriority="high"
+    />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "Raí Santos — Web Design de Alta Conversão",
+      "description": "Especialista em Web Design de alta conversão para clínicas estéticas, petshops e barbearias.",
+      "url": "https://raisantos.com.br",
+      "telephone": "+55-62-99609-5801",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Goiânia",
+        "addressRegion": "GO",
+        "addressCountry": "BR"
+      },
+      "areaServed": "BR",
+      "priceRange": "$$$$",
+      "knowsAbout": [
+        "Web Design",
+        "Otimização de Conversão",
+        "Desenvolvimento Front-end",
+        "SEO",
+        "Marketing Digital",
+        "Copywriting"
+      ],
+      "sameAs": [
+        "https://wa.me/5562996095801"
+      ]
+    }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
